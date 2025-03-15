@@ -23,7 +23,7 @@ The following commands will clone the template repository, rename it to your pro
 #### For macOS/Linux (Bash):
 ```bash
 # Clone the template repository
-git clone https://github.com/hirotaka-i/new_analysis.git 
+git clone https://github.com/MJFF-ResearchCommunity/small-analysis-project-template.git
 
 # Rename the folder. Substitute YOUR_PROJECT_NAME with your desired project name
 mv new_analysis YOUR_PROJECT_NAME 
@@ -38,7 +38,7 @@ rm -rf .git
 #### For Windows PowerShell:
 ```powershell
 # Clone the template repository
-git clone https://github.com/hirotaka-i/new_analysis.git 
+git clone https://github.com/MJFF-ResearchCommunity/small-analysis-project-template.git
 
 # Rename the folder. Substitute YOUR_PROJECT_NAME with your desired project name
 Rename-Item -Path "new_analysis" -NewName "YOUR_PROJECT_NAME" 
