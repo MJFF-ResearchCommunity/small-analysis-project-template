@@ -1,9 +1,10 @@
 # Introduction
 
-This repository provides a structured template for starting a new (one-person) analytical project. It is designed with the following priorities in mind:
+This repository provides a structured template for starting a new analytical project. It is designed with the following priorities in mind:
 
 1. **Reproducibility**: Ensure that analyses are easily reproducible with a clear folder structure and environmental setup guidelines.
 2. **Security**: Prevent sensitive information, such as data, API keys, and passwords, from being uploaded to GitHub.
+3. **AI assistance**: Provide clear instructions for using AI tools (e.g., GitHub Copilot) to assist in code generation and analysis, while maintaining guidelines for reproducibility and security.
 
 The following sections require git to be installed on your machine. If you have not set up the git, please follow the instructions [here](https://docs.github.com/en/get-started/quickstart/set-up-git)
 
@@ -23,10 +24,7 @@ The following commands will clone the template repository, rename it to your pro
 #### For macOS/Linux (Bash):
 ```bash
 # Clone the template repository
-git clone https://github.com/MJFF-ResearchCommunity/small-analysis-project-template.git
-
-# Rename the folder. Substitute YOUR_PROJECT_NAME with your desired project name
-mv new_analysis YOUR_PROJECT_NAME 
+git clone https://github.com/MJFF-ResearchCommunity/small-analysis-project-template.git YOUR_PROJECT_NAME
 
 # Change directory to the new project folder
 cd YOUR_PROJECT_NAME
@@ -38,10 +36,7 @@ rm -rf .git
 #### For Windows PowerShell:
 ```powershell
 # Clone the template repository
-git clone https://github.com/MJFF-ResearchCommunity/small-analysis-project-template.git
-
-# Rename the folder. Substitute YOUR_PROJECT_NAME with your desired project name
-Rename-Item -Path "new_analysis" -NewName "YOUR_PROJECT_NAME" 
+git clone https://github.com/MJFF-ResearchCommunity/small-analysis-project-template.git YOUR_PROJECT_NAME
 
 # Change directory to the new project folder
 Set-Location "YOUR_PROJECT_NAME"
@@ -90,7 +85,8 @@ git config --global user.email "Your Email"
 
 ## Environment Setup
 
-For Python projects, the recommended way to manage the environment is by using Python’s built-in `venv` module. Follow the steps below to set up your environment, manage dependencies, and ensure consistency across development environments.
+For Python projects, the recommended way to manage the environment is by using Python’s built-in `venv` module. Follow the steps below to set up your environment, manage dependencies, and ensure consistency across development environments.    
+Once you activate the environment. You would see (.venv) on your shell lines.
 
 ### Step 1: Create a Virtual Environment
 
@@ -113,6 +109,13 @@ python -m venv .venv
 # Activate the virtual environment
 .venv\Scripts\Activate 
 ```
+
+**NOTE:** The following is to confirm the correct python set-up. If not, check the PATH (`echo $PATH`)
+```
+which python
+> ($PWD)/.venv/bin/python
+```
+
 
 #### Package Installation:
 ```
@@ -148,13 +151,21 @@ deactivate
 
 ##### Specify Python Version with `pyenv` (Optional)
 
-If you use `pyenv` to manage Python versions, you can specify a different Python version when creating the virtual environment. For example:
+By default, a virtual environment uses the Python version available when it is created.  
+If you are using `pyenv`, you can set a specific Python version for your project as follows:
 
 ```bash
-python3.9 -m venv .venv 
+# Choose the desired Python version managed by pyenv
+pyenv install 3.12.6        # only if not already installed
+pyenv local 3.12.6          # creates a .python-version file
+
+# Then create a virtual environment with that version
+python -m venv .venv
 ```
 
-This ensures the environment is created using Python 3.9 (or another desired version).
+This way:  
+- Your virtual environment (`.venv`) will always use that Python version.  
+- `.python-version` is created automatically by `pyenv local`.  
 
 ##### GitHub CLI (Optional)
 [GitHub CLI](https://cli.github.com/manual/gh_repo_create) can create a new GitHub repository directly from the terminal: 
@@ -167,21 +178,24 @@ e.g. `gh repo create my-new-repo --public --source=. --remote=origin`
 The recommended folder structure is as follows:
 
 ```
-new_analysis
+YOUR_PROJECT_NAME
 ├── README.md
 ├── code                 # Code snippets and scripts
 │   ├── test.py
 │   ├── test.r
-│   ├── main.sh          # Shell script to run the main analysis
-├── data                 # Input data (gitignored)
-│   ├── testdata.csv
-├── priv                 # Private information (gitignored)
-│   ├── exports.sh       # Script to export environment variables
-│   ├── private.txt      # Sensitive information, e.g., API keys
-├── report               # Analysis outputs (figures, summaries)
+│   └── main.sh          # Shell script to run the main analysis
+├── data                 # Raw input data (gitignored except .gitkeep)
+│   └── .gitkeep
+├── priv                 # Private credentials/config (gitignored except .gitkeep)
+│   └── .gitkeep
+├── log                  # Runtime logs (gitignored)
+│   └── .gitkeep
+├── output               # Final detailed outputs and model artifacts (gitignored)
+│   └── .gitkeep
+├── report               # Git-safe de-identified summaries and figures
 │   └── report.txt
-├── temp                 # Temporary files (gitignored)
-│   ├── temp1.txt
+├── temp                 # Intermediate files and caches (gitignored except .gitkeep)
+│   └── .gitkeep
 ├── requirements.txt
 └── .gitignore
 ```
@@ -190,13 +204,13 @@ Once the `venv` is created, a `.venv` folder will also be generated and should r
 
 ## Security
 
-To safeguard sensitive information, the `data`, `priv`, and `temp` folders are gitignored by default:
+To safeguard sensitive information, this template enforces directory-specific behavior:
 
-- The **`data`** folder is for input data.
-- The **`priv`** folder stores private information such as API keys and passwords.
-- The **`temp`** folder holds temporary files generated during analysis.
+- The **`data`** and **`priv`** folders are input-only and should be treated as read-only during analysis.
+- The **`temp`**, **`log`**, and **`output`** folders are for intermediate artifacts, logs, and sensitive detailed outputs, and are gitignored.
+- The **`report`** folder is the only place for Git-safe deliverables (de-identified, aggregated summaries and publication-safe plots/tables).
 
-**Note**: Ensure that sensitive information is never stored in the `report` folder or any other tracked location.
+Practical rule: if a file contains row-level, identifiable, or highly detailed outputs, store it in `output/` (or `temp/` if intermediate), not `report/`.
 
 
 # Larger project template with cookiecutter

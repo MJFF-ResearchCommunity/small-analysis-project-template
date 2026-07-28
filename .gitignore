@@ -159,7 +159,19 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-data/
-priv/
-temp/
-temp*
+# Sensitive inputs and intermediate artifacts
+data/*
+!data/.gitkeep
+
+priv/*
+!priv/.gitkeep
+
+temp/*
+!temp/.gitkeep
+
+# Runtime artifacts and sensitive outputs
+log/*
+!log/.gitkeep
+
+output/*
+!output/.gitkeep
